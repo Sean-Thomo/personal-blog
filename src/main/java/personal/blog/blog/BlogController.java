@@ -2,10 +2,13 @@ package personal.blog.blog;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
 public class BlogController {
+
     @GetMapping("/")
     public String home() {
         return "index";
@@ -26,5 +29,13 @@ public class BlogController {
         return "add";
     }
     
-    
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String loginPost(@RequestParam String email, @RequestParam String password) {
+        return "dashboard";
+    }
 }
