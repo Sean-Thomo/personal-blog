@@ -7,8 +7,8 @@ class LoginDetails {
     
     private HashMap loginDetails;
 
-    public HashMap setLoginDetails(String email, String password) {
-        return this.loginDetails = (HashMap) loginDetails.put(email, password);
+    public void setLoginDetails(String email, String password) {
+        this.loginDetails = (HashMap) loginDetails.put(email, password);
     }
 
     public HashMap getLoginDetails() {
