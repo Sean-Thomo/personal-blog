@@ -36,6 +36,8 @@ public class BlogController {
 
     @PostMapping("/login")
     public String loginPost(@RequestParam String email, @RequestParam String password) {
+        LoginDetails loginDetails = new LoginDetails();
+        loginDetails.setLoginDetails(email, password);
         return "dashboard";
     }
 }
