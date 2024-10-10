@@ -3,13 +3,16 @@ package personal.blog.blog;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
@@ -23,12 +26,22 @@ public class BlogController {
     private static final Gson GSON = new Gson();
 
     JsonArray articlesArray = new JsonArray();
-
-    private static final String USERNAME = "seansthomo@gmail.com";
-    private static final String PASSWORD = "password123";
+    int maxId = 0;
 
     @GetMapping("/")
     public String home() {
+        try (FileReader reader = new FileReader(FILE_NAME)) {
+            articlesArray = (JsonArray) JsonParser.parseReader(reader);
+            for (int i = 0; i < articlesArray.size(); i++) {
+                JsonObject item = articlesArray.get(i).getAsJsonObject();
+                int currentId = item.get("id").getAsInt();
+                if (currentId > maxId) {
+                    maxId = currentId;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("No existing file found, creating a new one.");
+        }
         return "index";
     }
 
@@ -52,7 +65,8 @@ public class BlogController {
         JsonObject newArticleObject = new JsonObject();
         newArticleObject.addProperty("title", title);
         newArticleObject.addProperty("content", content);
-        newArticleObject.addProperty("date", DATE_FORMAT.format(java.time.LocalDate.now()));
+        newArticleObject.addProperty("date", DATE_FORMAT.format(LocalDate.now()));
+        newArticleObject.addProperty("id", ++maxId);
         articlesArray.add(newArticleObject);
         saveArticles(articlesArray);
         System.out.println("New article added: " + title + " - " + content);
