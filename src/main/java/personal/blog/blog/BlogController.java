@@ -5,9 +5,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.HashMap;
+
 
 @Controller
 public class BlogController {
+
+    private static final String USERNAME = "seansthomo@gmail.com";
+    private static final String PASSWORD = "password123";
 
     @GetMapping("/")
     public String home() {
@@ -36,10 +41,13 @@ public class BlogController {
 
     @PostMapping("/login")
     public String loginPost(@RequestParam String email, @RequestParam String password) {
-        LoginDetails loginDetails = new LoginDetails();
-        loginDetails.setLoginDetails(email, password);
-
-        loginDetails.getLoginDetails();
-        return "dashboard";
+        if (USERNAME.equals(email) && PASSWORD.equals(password)) {
+            System.out.println("Login successful for user: " + email);
+            return "dashboard";
+        } else {
+            // Invalid credentials
+            System.out.println("Login failed for user: " + email);
+            return "login";
+        }
     }
 }
