@@ -55,4 +55,16 @@ public class BlogController {
     public String signup() {
         return "signup";
     }
+
+    @PostMapping("/signup")
+    public String signupPost(@RequestParam String email, @RequestParam String password) {
+        if (!userCredentials.containsKey(email)) {
+            userCredentials.put(email, password);
+            System.out.println("User registered: " + email);
+            return "dashboard";
+        } else {
+            System.out.println("User already exists: " + email);
+            return "login";
+        }
+    }
 }
