@@ -46,7 +46,13 @@ public class BlogController {
             System.out.println("Login successful for user: " + email);
             return "dashboard";
         } else {
+            System.out.println("Login failed for user: " + email);
             return "signup";
         }
+    }
+
+    @GetMapping("/signup")
+    public String signup() {
+        return "signup";
     }
 }
