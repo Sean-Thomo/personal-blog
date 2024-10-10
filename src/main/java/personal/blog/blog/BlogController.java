@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -21,16 +22,32 @@ import java.util.HashMap;
 public class BlogController {
     private HashMap<String, String> userCredentials = new HashMap<>();
 
-    private static final String FILE_NAME = "articles.json";
+    private static final String ARTICLE_FILE = "articles.json";
+    private static final String LOGIN_FILE = "login_details.json";
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private static final Gson GSON = new Gson();
 
     JsonArray articlesArray = new JsonArray();
+    JsonArray userCredentialsArray = new JsonArray();
     int maxId = 0;
 
     @GetMapping("/")
     public String home() {
-        try (FileReader reader = new FileReader(FILE_NAME)) {
+
+        try (FileReader reader = new FileReader(LOGIN_FILE)) {
+            userCredentialsArray = (JsonArray) JsonParser.parseReader(reader);
+            for (int i = 0; i < userCredentialsArray.size(); i++) {
+                JsonObject user = userCredentialsArray.get(i).getAsJsonObject();
+                String email = user.get("email").getAsString();
+                String password = user.get("password").getAsString();
+                userCredentials.put("email", email);
+                userCredentials.put("password", password);
+            }
+        } catch (Exception e) {
+            System.out.println("No existing credentials file found, creating a new one.");
+        }
+
+        try (FileReader reader = new FileReader(ARTICLE_FILE)) {
             articlesArray = (JsonArray) JsonParser.parseReader(reader);
             for (int i = 0; i < articlesArray.size(); i++) {
                 JsonObject item = articlesArray.get(i).getAsJsonObject();
@@ -40,7 +57,7 @@ public class BlogController {
                 }
             }
         } catch (Exception e) {
-            System.out.println("No existing file found, creating a new one.");
+            System.out.println("No existing article file found, creating a new one.");
         }
         return "index";
     }
@@ -107,11 +124,16 @@ public class BlogController {
     }
 
     private static void saveArticles(JsonArray articlesArray) {
-        try (FileWriter file = new FileWriter(FILE_NAME)) {
+        try (FileWriter file = new FileWriter(ARTICLE_FILE)) {
             file.write(GSON.toJson(articlesArray));
             file.flush();
         } catch (IOException e) {
             System.out.println("Error saving article: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard() {
+        return "dashboard";
     }
 }
