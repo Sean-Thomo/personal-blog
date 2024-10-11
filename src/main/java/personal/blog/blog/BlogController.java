@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -97,7 +96,7 @@ public class BlogController {
 
     @PostMapping("/login")
     public String loginPost(@RequestParam String email, @RequestParam String password) {
-        if (userCredentials.containsKey(email) && userCredentials.containsKey(password)) {
+        if (userCredentials.containsValue(email) && userCredentials.containsValue(password)) {
             System.out.println("Login successful for user: " + email);
             return "dashboard";
         } else {
@@ -113,13 +112,26 @@ public class BlogController {
 
     @PostMapping("/signup")
     public String signupPost(@RequestParam String email, @RequestParam String password) {
-        if (!userCredentials.containsKey(email)) {
-            userCredentials.put(email, password);
+        if (!userCredentials.containsValue(email)) {
+            JsonObject newUserObject = new JsonObject();
+            newUserObject.addProperty("email", email);
+            newUserObject.addProperty("password", password);
+            userCredentialsArray.add(newUserObject);
+            saveUserCredentials(userCredentialsArray);
             System.out.println("User registered: " + email);
             return "dashboard";
         } else {
             System.out.println("User already exists: " + email);
             return "login";
+        }
+    }
+
+    private void saveUserCredentials(JsonArray userArray) {
+        try (FileWriter file = new FileWriter(LOGIN_FILE)) {
+            file.write(GSON.toJson(userArray));
+            file.flush();
+        } catch (IOException e) {
+            System.out.println("Error saving user credentials: " + e.getMessage());
         }
     }
 
