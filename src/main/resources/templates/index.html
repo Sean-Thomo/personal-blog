@@ -14,10 +14,11 @@
 
 		<a href="/login">Not Signed in?</a>
 
-		<a href="/article">
+		<a href="/article" th:each="$article: ${articles}">
 			<div>
-				<h3 class="article-title">My first article</h3>
-				<p class="date">August 8, 2024</p>
+				<h3 class="article-title" th:text="article.title">My first article</h3>
+				<p class="date" th:text="article.content">Something here</p>
+				<p class="date" th:text="article.date">August 8, 2024</p>
 			</div>
 		</a>
 	</body>

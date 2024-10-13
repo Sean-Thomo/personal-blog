@@ -5,7 +5,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,13 +35,22 @@ public class BlogController {
     int maxId = 0;
 
     @GetMapping("/")
-    public String home() {
-
+    public String home(Model model) {
+        List<String> articles = new ArrayList<String>();
         try (FileReader reader = new FileReader(ARTICLE_FILE)) {
             articlesArray = (JsonArray) JsonParser.parseReader(reader);
             for (int i = 0; i < articlesArray.size(); i++) {
                 JsonObject item = articlesArray.get(i).getAsJsonObject();
                 int currentId = item.get("id").getAsInt();
+                String title = item.get("title").getAsString();
+                String content = item.get("content").getAsString();
+                String date = item.get("date").getAsString();
+                articles.add(title);
+                articles.add(content);
+                articles.add(date);
+                model.addAttribute("articles", articles);
+//                model.addAttribute("content", content);
+//                model.addAttribute("date", date);
                 if (currentId > maxId) {
                     maxId = currentId;
                 }
@@ -47,6 +58,7 @@ public class BlogController {
         } catch (Exception e) {
             System.out.println("No existing article file found, creating a new one.");
         }
+        System.out.println("Article" + articles);
         return "index";
     }
 
