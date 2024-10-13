@@ -12,8 +12,8 @@
 
     <a href="add">Write article</a>
 
-    <div>
-        <a href="/article" class="article-title">My first article</a>
+    <div th:if="${articles}">
+        <a href="/article" class="article-title" th:text="${articles}"></a>
         <a href="/edit" class="edit btn">Edit</a>
         <a href="/delete" class="delete btn">Delete</a>
     </div>
