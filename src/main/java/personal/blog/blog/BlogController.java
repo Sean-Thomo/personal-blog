@@ -35,19 +35,6 @@ public class BlogController {
     @GetMapping("/")
     public String home() {
 
-        try (FileReader reader = new FileReader(LOGIN_FILE)) {
-            userCredentialsArray = (JsonArray) JsonParser.parseReader(reader);
-            for (int i = 0; i < userCredentialsArray.size(); i++) {
-                JsonObject user = userCredentialsArray.get(i).getAsJsonObject();
-                String email = user.get("email").getAsString();
-                String password = user.get("password").getAsString();
-                userCredentials.put("email", email);
-                userCredentials.put("password", password);
-            }
-        } catch (Exception e) {
-            System.out.println("No existing credentials file found, creating a new one.");
-        }
-
         try (FileReader reader = new FileReader(ARTICLE_FILE)) {
             articlesArray = (JsonArray) JsonParser.parseReader(reader);
             for (int i = 0; i < articlesArray.size(); i++) {
@@ -93,6 +80,18 @@ public class BlogController {
     
     @GetMapping("/login")
     public String login() {
+        try (FileReader reader = new FileReader(LOGIN_FILE)) {
+            userCredentialsArray = (JsonArray) JsonParser.parseReader(reader);
+            for (int i = 0; i < userCredentialsArray.size(); i++) {
+                JsonObject user = userCredentialsArray.get(i).getAsJsonObject();
+                String email = user.get("email").getAsString();
+                String password = user.get("password").getAsString();
+                userCredentials.put("email", email);
+                userCredentials.put("password", password);
+            }
+        } catch (Exception e) {
+            System.out.println("No existing credentials file found, creating a new one.");
+        }
         return "login";
     }
 
