@@ -52,7 +52,12 @@ public class BlogController {
             System.out.println("No existing article file found, creating a new one.");
         }
 
-        model.addAttribute("articles", articles);
+        if (!articles.isEmpty()) {
+            model.addAttribute("articles", articles);
+        } else {
+            model.addAttribute("articles", new ArrayList<>());
+        }
+
         return "index";
     }
 
