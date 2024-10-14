@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -102,6 +103,37 @@ public class BlogController {
     @GetMapping("/article")
     public String article() {
         return "article";
+    }
+
+    @GetMapping("/article/{id}")
+    public String getArticleById(@PathVariable int id, Model model) {
+        Article foundArticle = null;
+
+        try (FileReader reader = new FileReader(ARTICLE_FILE)) {
+            JsonArray articlesArray = (JsonArray) JsonParser.parseReader(reader);
+            for (int i = 0; i < articlesArray.size(); i++) {
+                JsonObject item = articlesArray.get(i).getAsJsonObject();
+                Article article = new Article();
+                article.setId(item.get("id").getAsInt());
+                article.setTitle(item.get("title").getAsString());
+                article.setContent(item.get("content").getAsString());
+                article.setDate(item.get("date").getAsString());
+
+                if (article.getId() == id) {
+                    foundArticle = article;
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error loading articles: " + e.getMessage());
+        }
+
+        if (foundArticle != null) {
+            model.addAttribute("article", foundArticle);
+            return "article";
+        } else {
+            return "404";
+        }
     }
 
     @GetMapping("/edit")
