@@ -57,7 +57,6 @@ public class BlogController {
         } else {
             model.addAttribute("articles", new ArrayList<>());
         }
-
         return "index";
     }
 
@@ -81,6 +80,22 @@ public class BlogController {
 
         public void setDate(String date) {
             this.date = date;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public int getId() {
+            return id;
         }
     }
 
