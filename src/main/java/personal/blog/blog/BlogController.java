@@ -36,30 +36,47 @@ public class BlogController {
 
     @GetMapping("/")
     public String home(Model model) {
-        List<String> articles = new ArrayList<String>();
+        List<Article> articles = new ArrayList<>();
         try (FileReader reader = new FileReader(ARTICLE_FILE)) {
-            articlesArray = (JsonArray) JsonParser.parseReader(reader);
+            JsonArray articlesArray = (JsonArray) JsonParser.parseReader(reader);
             for (int i = 0; i < articlesArray.size(); i++) {
                 JsonObject item = articlesArray.get(i).getAsJsonObject();
-                int currentId = item.get("id").getAsInt();
-                String title = item.get("title").getAsString();
-                String content = item.get("content").getAsString();
-                String date = item.get("date").getAsString();
-                articles.add(title);
-                articles.add(content);
-                articles.add(date);
-                model.addAttribute("articles", articles);
-//                model.addAttribute("content", content);
-//                model.addAttribute("date", date);
-                if (currentId > maxId) {
-                    maxId = currentId;
-                }
+                Article article = new Article();
+                article.setId(item.get("id").getAsInt());
+                article.setTitle(item.get("title").getAsString());
+                article.setContent(item.get("content").getAsString());
+                article.setDate(item.get("date").getAsString());
+                articles.add(article);
             }
         } catch (Exception e) {
             System.out.println("No existing article file found, creating a new one.");
         }
-        System.out.println("Article" + articles);
+
+        model.addAttribute("articles", articles);
         return "index";
+    }
+
+    public class Article {
+        private String title;
+        private String content;
+        private String date;
+        private int id;
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
     }
 
     @GetMapping("/article")

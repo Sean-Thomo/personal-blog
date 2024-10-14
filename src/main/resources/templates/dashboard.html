@@ -2,21 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
 </head>
 <body>
-    <h1>Personal Blog</h1>
+<h1>Personal Blog</h1>
 
-    <a href="add">Write article</a>
+<a href="add">Write article</a>
 
-    <div th:if="${articles}">
-        <a href="/article" class="article-title" th:text="${articles}"></a>
-        <a href="/edit" class="edit btn">Edit</a>
-        <a href="/delete" class="delete btn">Delete</a>
+<div th:if="${articles}">
+    <div th:each="article : ${articles}">
+        <h2>
+            <a th:href="@{/article(id=${article.id})}" class="article-title" th:text="${article.title}"></a>
+        </h2>
+        <p th:text="${article.content}"></p>
+        <small th:text="${article.date}"></small>
+        <div>
+            <a th:href="@{/edit(id=${article.id})}" class="edit btn">Edit</a>
+            <a th:href="@{/delete(id=${article.id})}" class="delete btn">Delete</a>
+        </div>
     </div>
-    </a>
+</div>
 </body>
 </html>
