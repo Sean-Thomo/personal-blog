@@ -8,11 +8,12 @@
 		/>
 		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 		<title>Home</title>
+		<link rel="stylesheet" href="css/styles.css" />
 	</head>
 	<body>
 		<h1>Feed</h1>
 
-		<a href="/login">Not Signed in?</a>
+		<a href="/login" class="button">Not Signed in?</a><br />
 
 		<div th:if="${articles}">
 			<div th:each="article : ${articles}">
@@ -23,6 +24,5 @@
 				</a>
 			</div>
 		</div>
-
 	</body>
 </html>
