@@ -9,13 +9,17 @@
 	<body>
 		<h1>Update Article</h1>
 
+		<div>
+			<a href="/">Home</a>
+			<a href="/dashboard">Dashboard</a>
+		</div>
+
 		<form action="/edit" method="post">
 			<label for="heading">Article Title</label><br />
 			<input type="text" name="article-title" id="article-title" /><br />
 			<label for="content">Content</label><br />
 			<textarea name="content" id="content"></textarea><br /><br />
 			<button type="submit" class="button">Publish</button>
-			<!-- <button type="submit">Update</button> -->
 		</form>
 	</body>
 </html>
