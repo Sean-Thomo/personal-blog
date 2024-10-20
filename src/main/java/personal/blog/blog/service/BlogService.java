@@ -98,24 +98,15 @@ public class BlogService {
         }
     }
 
-    public void setArticles() {
+    public String addArticle(String title, String content) {
         JsonArray articlesArray = new JsonArray();
+
         try (FileReader reader = new FileReader(ARTICLE_FILE)) {
             articlesArray = (JsonArray) JsonParser.parseReader(reader);
             for (int i = 0; i < articlesArray.size(); i++) {
                 JsonObject item = articlesArray.get(i).getAsJsonObject();
                 maxId = item.get("id").getAsInt();
             }
-        } catch (Exception e) {
-            System.out.println("Something went wrong :" + e);
-        }
-    }
-
-    public String addArticle(String title, String content) {
-        JsonArray articlesArray = new JsonArray();
-
-        try (FileReader reader = new FileReader(ARTICLE_FILE)) {
-            articlesArray = (JsonArray) JsonParser.parseReader(reader);
         } catch (Exception e) {
             System.out.println("Error reading existing articles: " + e.getMessage());
         }
