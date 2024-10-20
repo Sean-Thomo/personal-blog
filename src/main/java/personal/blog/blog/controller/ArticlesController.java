@@ -193,6 +193,7 @@ public class ArticlesController {
         List<Article> articles = getArticles();
         model.addAttribute("articles", articles);
 //        return "dashboard";
+        System.out.println(articles.toString());
         return articles;
     }
 
