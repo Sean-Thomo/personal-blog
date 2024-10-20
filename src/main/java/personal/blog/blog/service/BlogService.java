@@ -109,6 +109,16 @@ public class BlogService {
     }
 
     public void addArticle(String title, String content) {
+        try (FileReader reader = new FileReader(ARTICLE_FILE)) {
+            JsonArray articlesArray = (JsonArray) JsonParser.parseReader(reader);
+            for (int i = 0; i < articlesArray.size(); i++) {
+                JsonObject item = articlesArray.get(i).getAsJsonObject();
+                maxId = item.get("id").getAsInt();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         JsonArray articlesArray = new JsonArray();
         JsonObject newArticleObject = new JsonObject();
         newArticleObject.addProperty("title", title);
