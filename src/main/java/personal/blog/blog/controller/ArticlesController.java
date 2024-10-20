@@ -1,4 +1,13 @@
-package personal.blog.blog;
+package personal.blog.blog.controller;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import personal.blog.blog.entity.Article;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -9,21 +18,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-
 @Controller
-public class BlogController {
+public class ArticlesController {
     private HashMap<String, String> userCredentials = new HashMap<>();
 
     private static final String ARTICLE_FILE = "articles.json";
@@ -64,45 +60,6 @@ public class BlogController {
             System.out.println("No existing article file found, creating a new one.");
         }
         return articles;
-    }
-
-    public class Article {
-        private String title;
-        private String content;
-        private String date;
-        private int id;
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public void setContent(String content) {
-            this.content = content;
-        }
-
-        public void setDate(String date) {
-            this.date = date;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getContent() {
-            return content;
-        }
-
-        public String getDate() {
-            return date;
-        }
-
-        public int getId() {
-            return id;
-        }
     }
 
     @GetMapping("/article")
@@ -161,9 +118,9 @@ public class BlogController {
         articlesArray.add(newArticleObject);
         saveArticles(articlesArray);
         System.out.println("New article added: " + title + " - " + content);
-        return "add";
+        return "dashboard";
     }
-    
+
     @GetMapping("/login")
     public String login() {
         try (FileReader reader = new FileReader(LOGIN_FILE)) {
@@ -185,7 +142,7 @@ public class BlogController {
     public String loginPost(@RequestParam String email, @RequestParam String password) {
         if (userCredentials.containsValue(email) && userCredentials.containsValue(password)) {
             System.out.println("Login successful for user: " + email);
-            return "/";
+            return "dashboard";
         } else {
             System.out.println("Login failed for user: " + email);
             return "signup";
@@ -232,9 +189,11 @@ public class BlogController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(Model model) {
+    public List<Article> dashboard(Model model) {
         List<Article> articles = getArticles();
         model.addAttribute("articles", articles);
-        return "dashboard";
+//        return "dashboard";
+        return articles;
     }
+
 }
