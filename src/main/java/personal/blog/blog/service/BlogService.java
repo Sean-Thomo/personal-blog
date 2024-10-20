@@ -26,8 +26,6 @@ public class BlogService {
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private HashMap<String, String> userCredentials = new HashMap<>();
     JsonArray userCredentialsArray = new JsonArray();
-    int maxId = 0;
-
 
     public List<Article> getArticles() {
         List<Article> articles = new ArrayList<>();
@@ -73,24 +71,15 @@ public class BlogService {
     }
 
     public String login(String email, String password) {
-        try (FileReader reader = new FileReader(LOGIN_FILE)) {
-            userCredentialsArray = (JsonArray) JsonParser.parseReader(reader);
-            for (int i = 0; i < userCredentialsArray.size(); i++) {
-                JsonObject user = userCredentialsArray.get(i).getAsJsonObject();
-                String userEmail = user.get("email").getAsString();
-                String userPassword = user.get("password").getAsString();
-                if (userCredentials.containsValue(email) && userCredentials.containsValue(password)) {
-                    System.out.println("Login successful for user: " + email);
-                    return "dashboard";
-                } else {
-                    System.out.println("Login failed for user: " + email);
-                    return "signup";
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("No existing credentials file found, creating a new one.");
+        System.out.println("User Credentials:" + userCredentials.toString());
+
+        if (userCredentials.containsValue(email) && userCredentials.containsValue(password)) {
+            System.out.println("Login successful for user: " + email);
+            return "dashboard";
+        } else {
+            System.out.println("Login failed for user: " + email);
+            return "signup";
         }
-        return email;
     }
 
     public String signup(String email, String password) {
@@ -101,19 +90,22 @@ public class BlogService {
             userCredentialsArray.add(newUserObject);
             saveUserCredentials(userCredentialsArray);
             System.out.println("User registered: " + email);
-            return "success";
+            return "dashboard";
         } else {
             System.out.println("User already exists: " + email);
-            return "error";
+            return "login";
         }
     }
 
     public void addArticle(String title, String content) {
+        int maxId = 0;
+
         try (FileReader reader = new FileReader(ARTICLE_FILE)) {
             JsonArray articlesArray = (JsonArray) JsonParser.parseReader(reader);
             for (int i = 0; i < articlesArray.size(); i++) {
                 JsonObject item = articlesArray.get(i).getAsJsonObject();
                 maxId = item.get("id").getAsInt();
+                System.out.println("Last article ID: " + maxId);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -128,6 +120,21 @@ public class BlogService {
         articlesArray.add(newArticleObject);
         saveArticles(articlesArray);
         System.out.println("New article added: " + title + " - " + content);
+    }
+
+    public void setUserCredentials() {
+        try (FileReader reader = new FileReader(LOGIN_FILE)) {
+            userCredentialsArray = (JsonArray) JsonParser.parseReader(reader);
+            for (int i = 0; i < userCredentialsArray.size(); i++) {
+                JsonObject user = userCredentialsArray.get(i).getAsJsonObject();
+                String email = user.get("email").getAsString();
+                String password = user.get("password").getAsString();
+                userCredentials.put("email", email);
+                userCredentials.put("password", password);
+            }
+        } catch (Exception e) {
+            System.out.println("No existing credentials file found, creating a new one.");
+        }
     }
 
     private void saveUserCredentials(JsonArray userArray) {

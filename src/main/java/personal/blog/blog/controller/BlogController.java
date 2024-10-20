@@ -17,6 +17,7 @@ public class BlogController {
 
     @GetMapping("/")
     public String home(Model model) {
+        blogService.setUserCredentials();
         List<Article> articles = blogService.getArticles();
 
         if (!articles.isEmpty()) {
@@ -62,12 +63,12 @@ public class BlogController {
 
     @PostMapping("/login")
     public String loginPost(@RequestParam String email, @RequestParam String password) {
-        blogService.login(email, password);
-        return "dashboard";
+        return blogService.login(email, password);
     }
 
     @GetMapping("/signup")
     public String signup() {
+        blogService.setUserCredentials();
         return "signup";
     }
 
