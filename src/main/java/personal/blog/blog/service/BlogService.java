@@ -26,6 +26,7 @@ public class BlogService {
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private HashMap<String, String> userCredentials = new HashMap<>();
     JsonArray userCredentialsArray = new JsonArray();
+    int maxId = 0;
 
     public List<Article> getArticles() {
         List<Article> articles = new ArrayList<>();
@@ -97,21 +98,28 @@ public class BlogService {
         }
     }
 
-    public void addArticle(String title, String content) {
-        int maxId = 0;
-
+    public void setArticles() {
+        JsonArray articlesArray = new JsonArray();
         try (FileReader reader = new FileReader(ARTICLE_FILE)) {
-            JsonArray articlesArray = (JsonArray) JsonParser.parseReader(reader);
+            articlesArray = (JsonArray) JsonParser.parseReader(reader);
             for (int i = 0; i < articlesArray.size(); i++) {
                 JsonObject item = articlesArray.get(i).getAsJsonObject();
                 maxId = item.get("id").getAsInt();
-                System.out.println("Last article ID: " + maxId);
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            System.out.println("Something went wrong :" + e);
+        }
+    }
+
+    public String addArticle(String title, String content) {
+        JsonArray articlesArray = new JsonArray();
+
+        try (FileReader reader = new FileReader(ARTICLE_FILE)) {
+            articlesArray = (JsonArray) JsonParser.parseReader(reader);
+        } catch (Exception e) {
+            System.out.println("Error reading existing articles: " + e.getMessage());
         }
 
-        JsonArray articlesArray = new JsonArray();
         JsonObject newArticleObject = new JsonObject();
         newArticleObject.addProperty("title", title);
         newArticleObject.addProperty("content", content);
@@ -120,6 +128,7 @@ public class BlogService {
         articlesArray.add(newArticleObject);
         saveArticles(articlesArray);
         System.out.println("New article added: " + title + " - " + content);
+        return "dashboard";
     }
 
     public void setUserCredentials() {

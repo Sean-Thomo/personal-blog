@@ -1,8 +1,1 @@
-[
-	{
-		"title": "TESTING OVERWRITE",
-		"content": "LET\u0027S SEE",
-		"date": "20-10-2024",
-		"id": 1
-	}
-]
+[{"title":"TEST","content":"","date":"20-10-2024","id":2},{"title":"LET\u0027S SEE AGAIN","content":"","date":"20-10-2024","id":3},{"title":"GOOD SHIT","content":"HELL YEAH!!!!","date":"20-10-2024","id":4}]

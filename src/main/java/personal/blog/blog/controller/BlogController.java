@@ -52,8 +52,8 @@ public class BlogController {
 
     @PostMapping("/add")
     public String addPost(@RequestParam String title, @RequestParam String content) {
-        blogService.addArticle(title, content);
-        return "dashboard";
+        blogService.setArticles();
+        return blogService.addArticle(title, content);
     }
 
     @GetMapping("/login")
