@@ -37,6 +37,17 @@ public class BlogController {
 
     @GetMapping("/")
     public String home(Model model) {
+        List<Article> articles = getArticles();
+
+        if (!articles.isEmpty()) {
+            model.addAttribute("articles", articles);
+        } else {
+            model.addAttribute("articles", new ArrayList<>());
+        }
+        return "index";
+    }
+
+    private List<Article> getArticles() {
         List<Article> articles = new ArrayList<>();
         try (FileReader reader = new FileReader(ARTICLE_FILE)) {
             JsonArray articlesArray = (JsonArray) JsonParser.parseReader(reader);
@@ -52,13 +63,7 @@ public class BlogController {
         } catch (Exception e) {
             System.out.println("No existing article file found, creating a new one.");
         }
-
-        if (!articles.isEmpty()) {
-            model.addAttribute("articles", articles);
-        } else {
-            model.addAttribute("articles", new ArrayList<>());
-        }
-        return "index";
+        return articles;
     }
 
     public class Article {
@@ -156,7 +161,7 @@ public class BlogController {
         articlesArray.add(newArticleObject);
         saveArticles(articlesArray);
         System.out.println("New article added: " + title + " - " + content);
-        return "dashboard";
+        return "add";
     }
     
     @GetMapping("/login")
@@ -180,7 +185,7 @@ public class BlogController {
     public String loginPost(@RequestParam String email, @RequestParam String password) {
         if (userCredentials.containsValue(email) && userCredentials.containsValue(password)) {
             System.out.println("Login successful for user: " + email);
-            return "dashboard";
+            return "/";
         } else {
             System.out.println("Login failed for user: " + email);
             return "signup";
@@ -228,7 +233,8 @@ public class BlogController {
 
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
-        model.addAttribute("articles", "Article Test");
+        List<Article> articles = getArticles();
+        model.addAttribute("articles", articles);
         return "dashboard";
     }
 }
