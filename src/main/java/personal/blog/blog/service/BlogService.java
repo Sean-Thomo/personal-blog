@@ -9,7 +9,6 @@ import personal.blog.blog.entity.Article;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -139,7 +138,6 @@ public class BlogService {
                 String email = user.get("email").getAsString();
                 String password = user.get("password").getAsString();
                 userCredentials.put(email, password);
-//                userCredentials.put("password", password);
             }
         } catch (Exception e) {
             System.out.println("No existing credentials file found, creating a new one.");
