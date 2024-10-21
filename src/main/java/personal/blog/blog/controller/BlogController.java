@@ -19,13 +19,16 @@ public class BlogController {
     public String home(Model model) {
         blogService.setUserCredentials();
         List<Article> articles = blogService.getArticles();
-
-        if (!articles.isEmpty()) {
-            model.addAttribute("articles", articles);
-        } else {
-            model.addAttribute("articles", new ArrayList<>());
-        }
+        model.addAttribute("articles", articles);
         return "index";
+    }
+
+    @GetMapping("/articles")
+    public List<Article> articles() {
+        return blogService.getArticles();
+//        List<Article> articles = blogService.getArticles();
+//        model.addAttribute("articles", articles);
+//        return "articles";
     }
 
     @GetMapping("/article")
@@ -51,8 +54,10 @@ public class BlogController {
     }
 
     @PostMapping("/add")
-    public String addPost(@RequestParam String title, @RequestParam String content) {
-        return blogService.addArticle(title, content);
+//    public String addPost(@RequestParam String title, @RequestParam String content) {
+    public void addPost(@RequestBody Article article) {
+//        return blogService.addArticle(title, content);
+        blogService.addArticle(article);
     }
 
     @GetMapping("/login")
@@ -84,9 +89,8 @@ public class BlogController {
 
     @GetMapping("/dashboard")
     public List<Article> dashboard(Model model) {
-        List<Article> articles = blogService.getArticles();
-        model.addAttribute("articles", articles);
-        return articles;
+        //        model.addAttribute("articles", articles);
+        return blogService.getArticles();
     }
 
 }

@@ -26,10 +26,10 @@ public class BlogService {
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private HashMap<String, String> userCredentials = new HashMap<>();
     JsonArray userCredentialsArray = new JsonArray();
+    List<Article> articles = new ArrayList<>();
     int maxId = 0;
 
     public List<Article> getArticles() {
-        List<Article> articles = new ArrayList<>();
         try (FileReader reader = new FileReader(ARTICLE_FILE)) {
             JsonArray articlesArray = (JsonArray) JsonParser.parseReader(reader);
             for (int i = 0; i < articlesArray.size(); i++) {
@@ -71,6 +71,32 @@ public class BlogService {
         return foundArticle;
     }
 
+    public void addArticle(Article article) {
+//    public String addArticle(String title, String content) {
+        articles.add(article);
+//        JsonArray articlesArray = new JsonArray();
+//
+//        try (FileReader reader = new FileReader(ARTICLE_FILE)) {
+//            articlesArray = (JsonArray) JsonParser.parseReader(reader);
+//            for (int i = 0; i < articlesArray.size(); i++) {
+//                JsonObject item = articlesArray.get(i).getAsJsonObject();
+//                maxId = item.get("id").getAsInt();
+//            }
+//        } catch (Exception e) {
+//            System.out.println("Error reading existing articles: " + e.getMessage());
+//        }
+//
+//        JsonObject newArticleObject = new JsonObject();
+//        newArticleObject.addProperty("title", article.getTitle());
+//        newArticleObject.addProperty("content", article.getContent());
+//        newArticleObject.addProperty("date", DATE_FORMAT.format(LocalDate.now()));
+//        newArticleObject.addProperty("id", ++maxId);
+//        articlesArray.add(newArticleObject);
+//        saveArticles(articlesArray);
+//        System.out.println("New article added: " + article.getTitle() + " - " + article.getContent());
+//        return "dashboard";
+    }
+
     public String login(String email, String password) {
         System.out.println("User Credentials:" + userCredentials.toString());
 
@@ -96,30 +122,6 @@ public class BlogService {
             System.out.println("User already exists: " + email);
             return "login";
         }
-    }
-
-    public String addArticle(String title, String content) {
-        JsonArray articlesArray = new JsonArray();
-
-        try (FileReader reader = new FileReader(ARTICLE_FILE)) {
-            articlesArray = (JsonArray) JsonParser.parseReader(reader);
-            for (int i = 0; i < articlesArray.size(); i++) {
-                JsonObject item = articlesArray.get(i).getAsJsonObject();
-                maxId = item.get("id").getAsInt();
-            }
-        } catch (Exception e) {
-            System.out.println("Error reading existing articles: " + e.getMessage());
-        }
-
-        JsonObject newArticleObject = new JsonObject();
-        newArticleObject.addProperty("title", title);
-        newArticleObject.addProperty("content", content);
-        newArticleObject.addProperty("date", DATE_FORMAT.format(LocalDate.now()));
-        newArticleObject.addProperty("id", ++maxId);
-        articlesArray.add(newArticleObject);
-        saveArticles(articlesArray);
-        System.out.println("New article added: " + title + " - " + content);
-        return "dashboard";
     }
 
     public void setUserCredentials() {
