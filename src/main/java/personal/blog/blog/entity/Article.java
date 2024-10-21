@@ -6,6 +6,13 @@ public class Article {
     private String date;
     private int id;
 
+    public Article(String title, String content, String date, int id) {
+        this.title = title;
+        this.content = content;
+        this.date = date;
+        this.id = id;
+    }
+
     public void setId(int id) {
         this.id = id;
     }

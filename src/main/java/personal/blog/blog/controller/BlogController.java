@@ -26,21 +26,11 @@ public class BlogController {
     @GetMapping("/articles")
     public List<Article> articles() {
         return blogService.getArticles();
-//        List<Article> articles = blogService.getArticles();
-//        model.addAttribute("articles", articles);
-//        return "articles";
     }
 
-    @GetMapping("/article")
-    public String article() {
-        return "article";
-    }
-
-    @GetMapping("/article/{id}")
-    public String getArticleById(@PathVariable int id, Model model) {
-        Article foundArticle = blogService.getArticleById(id);
-        model.addAttribute("article", foundArticle);
-        return "article";
+    @GetMapping("/articles/{id}")
+    public Article getArticleById(@PathVariable int id) {
+        return blogService.getArticleById(id);
     }
 
     @GetMapping("/edit")
@@ -54,9 +44,7 @@ public class BlogController {
     }
 
     @PostMapping("/add")
-//    public String addPost(@RequestParam String title, @RequestParam String content) {
     public void addPost(@RequestBody Article article) {
-//        return blogService.addArticle(title, content);
         blogService.addArticle(article);
     }
 
