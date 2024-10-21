@@ -87,6 +87,11 @@ public class BlogService {
         }
     }
 
+    public void deleteArticle(int id) {
+        articles.removeIf(article -> article.getId() == id);
+        saveArticlesToFile(); // Save changes to file
+    }
+
     public String login(String email, String password) {
         System.out.println("User Credentials:" + userCredentials.toString());
 

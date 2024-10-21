@@ -23,6 +23,11 @@ public class BlogController {
         return "index";
     }
 
+    @GetMapping("/dashboard")
+    public List<Article> dashboard() {
+        return blogService.getArticles();
+    }
+
     @GetMapping("/articles")
     public List<Article> articles() {
         return blogService.getArticles();
@@ -31,6 +36,17 @@ public class BlogController {
     @GetMapping("/articles/{id}")
     public Article getArticleById(@PathVariable int id) {
         return blogService.getArticleById(id);
+    }
+
+    @PutMapping("/articles/{id}")
+    public void updateArticle(@PathVariable int id, @RequestBody Article updatedArticle) {
+        updatedArticle.setId(id);
+        blogService.updateArticle(updatedArticle);
+    }
+
+    @DeleteMapping("/articles/{id}")
+    public void deleteArticle(@PathVariable int id) {
+        blogService.deleteArticle(id);
     }
 
     @GetMapping("/edit")
@@ -74,11 +90,4 @@ public class BlogController {
             return "login";
         }
     }
-
-    @GetMapping("/dashboard")
-    public List<Article> dashboard(Model model) {
-        //        model.addAttribute("articles", articles);
-        return blogService.getArticles();
-    }
-
 }
