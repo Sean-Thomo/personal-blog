@@ -1,13 +1,14 @@
 package personal.blog.blog.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import personal.blog.blog.entity.Article;
 import personal.blog.blog.service.BlogService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -24,18 +25,25 @@ public class BlogController {
     }
 
     @GetMapping("/dashboard")
-    public List<Article> dashboard() {
-        return blogService.getArticles();
+    public ResponseEntity<List<Article>> dashboard() {
+        List<Article> articles = blogService.getArticles();
+        return ResponseEntity.ok(articles);
     }
 
     @GetMapping("/articles")
-    public List<Article> articles() {
-        return blogService.getArticles();
+    public ResponseEntity<List<Article>> articles() {
+        List<Article> articles = blogService.getArticles();
+        return ResponseEntity.ok(articles);
     }
 
     @GetMapping("/articles/{id}")
-    public Article getArticleById(@PathVariable int id) {
-        return blogService.getArticleById(id);
+    public ResponseEntity<Article> getArticleById(@PathVariable int id) {
+        Article article = blogService.getArticleById(id);
+        if (article != null) {
+            return ResponseEntity.ok(article);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @PutMapping("/articles/{id}")

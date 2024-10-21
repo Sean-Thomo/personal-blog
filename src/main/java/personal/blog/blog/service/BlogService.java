@@ -94,8 +94,7 @@ public class BlogService {
 
     public String login(String email, String password) {
         System.out.println("User Credentials:" + userCredentials.toString());
-
-        if (userCredentials.containsValue(email) && userCredentials.containsValue(password)) {
+        if (userCredentials.containsKey(email) && userCredentials.get(email).equals(password)) {
             System.out.println("Login successful for user: " + email);
             return "dashboard";
         } else {
@@ -112,7 +111,7 @@ public class BlogService {
             userCredentialsArray.add(newUserObject);
             saveUserCredentials(userCredentialsArray);
             System.out.println("User registered: " + email);
-            return "dashboard";
+            return "success";
         } else {
             System.out.println("User already exists: " + email);
             return "login";
@@ -139,8 +138,8 @@ public class BlogService {
                 JsonObject user = userCredentialsArray.get(i).getAsJsonObject();
                 String email = user.get("email").getAsString();
                 String password = user.get("password").getAsString();
-                userCredentials.put("email", email);
-                userCredentials.put("password", password);
+                userCredentials.put(email, password);
+//                userCredentials.put("password", password);
             }
         } catch (Exception e) {
             System.out.println("No existing credentials file found, creating a new one.");
