@@ -56,7 +56,8 @@ public class BlogService {
                 String title = item.get("title").getAsString();
                 String content = item.get("content").getAsString();
                 String date = item.get("date").getAsString();
-                Article article = new Article(title, content, date, id);
+                int articleId = item.get("id").getAsInt();
+                Article article = new Article(title, content, date, articleId);
 
                 if (article.getId() == id) {
                     foundArticle = article;
@@ -77,18 +78,22 @@ public class BlogService {
     }
 
     public void updateArticle(Article updatedArticle) {
-        for (int i = 0; i < articles.size(); i++) {
-            if (articles.get(i).getId() == updatedArticle.getId()) {
-                articles.set(i, updatedArticle);
-                saveArticlesToFile(); // Save changes to file
-                return;
+        List<Article> tempArticleList = new ArrayList<Article>();
+        for (Article article : articles) {
+            if (article.getId() == updatedArticle.getId()) {
+                article.setTitle(updatedArticle.getTitle());
+                article.setContent(updatedArticle.getContent());
+                article.setDate(DATE_FORMAT.format(java.time.LocalDate.now()));
+                article.setId(updatedArticle.getId());
             }
+            tempArticleList.add(article);
         }
+        this.articles = tempArticleList;
     }
 
     public void deleteArticle(int id) {
         articles.removeIf(article -> article.getId() == id);
-        saveArticlesToFile(); // Save changes to file
+        saveArticlesToFile();
     }
 
     public String login(String email, String password) {
