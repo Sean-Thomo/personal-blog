@@ -1,15 +1,13 @@
 package personal.blog.blog.entity;
 
 public class Article {
+    private int id;
     private String title;
     private String content;
-    private String date;
-    private int id;
 
-    public Article(String title, String content, String date, int id) {
+    public Article(int id, String title, String content, String date) {
         this.title = title;
         this.content = content;
-        this.date = date;
         this.id = id;
     }
 
@@ -25,20 +23,12 @@ public class Article {
         this.content = content;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     public String getTitle() {
         return title;
     }
 
     public String getContent() {
         return content;
-    }
-
-    public String getDate() {
-        return date;
     }
 
     public int getId() {
