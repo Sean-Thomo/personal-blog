@@ -32,8 +32,9 @@ public class BlogController {
     }
 
     @PostMapping("/articles")
-    public void createArticle(@RequestBody Article updatedArticle) {
+    public ResponseEntity<Void> createArticle(@RequestBody Article updatedArticle) {
         blogService.createArticle(updatedArticle);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/articles/{id}")

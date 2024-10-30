@@ -27,11 +27,26 @@ public class BlogService {
     }
 
     public void updateArticle(Article updatedArticle) {
-        articleList.removeIf(article -> article.getId() == updatedArticle.getId());
-        articleList.add(updatedArticle);
+//        articleList.removeIf(article -> article.getId() == updatedArticle.getId());
+//        articleList.add(updatedArticle);
+        ArrayList<Article> tempArticleList = new ArrayList<>();
+        for (Article article : articleList) {
+            if((article.getId() == updatedArticle.getId())) {
+                article.setTitle(updatedArticle.getTitle());
+                article.setContent(updatedArticle.getContent());
+            }
+        }
+        this.articleList = tempArticleList;
     }
 
     public void deleteArticle(int id) {
-        articleList.removeIf(article -> article.getId() == id);
+//        articleList.removeIf(article -> article.getId() == id);
+        ArrayList<Article> tempArticleList = new ArrayList<>();
+        for (Article article : articleList) {
+            if(article.getId() == id)
+                continue;
+            tempArticleList.add(article);
+        }
+        this.articleList = tempArticleList;
     }
 }
