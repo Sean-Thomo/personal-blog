@@ -1,10 +1,12 @@
 package personal.blog.blog.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import personal.blog.blog.entity.Article;
+import personal.blog.blog.repository.ArticleRepository;
 
 @Service
 public class BlogService {
@@ -13,6 +15,9 @@ public class BlogService {
             new Article(2,"Article 2", "This is the second article content.", "02-01-2022"),
             new Article(3,"Article 3", "This is the third article content.", "03-01-2022")
     ));
+
+    @Autowired
+    ArticleRepository articleRepository;
 
     public List<Article> getArticles() {
         return articleList;
@@ -23,12 +28,11 @@ public class BlogService {
     }
 
     public void createArticle(Article article) {
-        articleList.add(article);
+//        articleList.add(article);
+        articleRepository.save(article);
     }
 
     public void updateArticle(Article updatedArticle) {
-//        articleList.removeIf(article -> article.getId() == updatedArticle.getId());
-//        articleList.add(updatedArticle);
         ArrayList<Article> tempArticleList = new ArrayList<>();
         for (Article article : articleList) {
             if((article.getId() == updatedArticle.getId())) {
