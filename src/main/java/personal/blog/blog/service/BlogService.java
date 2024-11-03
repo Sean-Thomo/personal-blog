@@ -10,14 +10,14 @@ import personal.blog.blog.repository.ArticleRepository;
 
 @Service
 public class BlogService {
-    List<Article> articleList = new ArrayList<>(Arrays.asList(
-            new Article(1,"Article 1", "This is the first article content.", "01-01-2022"),
-            new Article(2,"Article 2", "This is the second article content.", "02-01-2022"),
-            new Article(3,"Article 3", "This is the third article content.", "03-01-2022")
-    ));
-
     @Autowired
     ArticleRepository articleRepository;
+
+    List<Article> articleList = new ArrayList<>(Arrays.asList(
+            new Article(1,"Article 1", "This is the first article content."),
+            new Article(2,"Article 2", "This is the second article content."),
+            new Article(3,"Article 3", "This is the third article content.")
+    ));
 
     public List<Article> getArticles() {
         return articleList;
