@@ -11,8 +11,6 @@ public class Article {
     private String title;
     private String content;
 
-    public Article() {
-    }
 
     public Article(int id, String title, String content) {
         this.title = title;

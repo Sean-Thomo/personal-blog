@@ -2,6 +2,8 @@ package personal.blog.blog.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "Writers")
 public class Writer {
@@ -11,6 +13,11 @@ public class Writer {
     private String name;
     private String surname;
     private String email;
+
+    @OneToMany
+    private List<Article> articles;
+
+    public Writer() {}
 
     public Writer(String name, String surname, String email) {
         this.name = name;
@@ -48,5 +55,13 @@ public class Writer {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Article> getArticles() {
+        return articles;
+    }
+
+    public void setArticles(List<Article> articles) {
+        this.articles = articles;
     }
 }
