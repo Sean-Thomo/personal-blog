@@ -28,29 +28,14 @@ public class BlogService {
     }
 
     public void createArticle(Article article) {
-//        articleList.add(article);
         articleRepository.save(article);
     }
 
     public void updateArticle(Article updatedArticle) {
-        ArrayList<Article> tempArticleList = new ArrayList<>();
-        for (Article article : articleList) {
-            if((article.getId() == updatedArticle.getId())) {
-                article.setTitle(updatedArticle.getTitle());
-                article.setContent(updatedArticle.getContent());
-            }
-        }
-        this.articleList = tempArticleList;
+        articleRepository.save(updatedArticle);
     }
 
     public void deleteArticle(int id) {
-//        articleList.removeIf(article -> article.getId() == id);
-        ArrayList<Article> tempArticleList = new ArrayList<>();
-        for (Article article : articleList) {
-            if(article.getId() == id)
-                continue;
-            tempArticleList.add(article);
-        }
-        this.articleList = tempArticleList;
+        articleRepository.delete(articleRepository.getReferenceById(id));
     }
 }
