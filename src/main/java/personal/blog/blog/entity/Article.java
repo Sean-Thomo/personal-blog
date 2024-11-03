@@ -11,6 +11,9 @@ public class Article {
     private String title;
     private String content;
 
+    @OneToMany
+    private Writer writer;
+
 
     public Article(int id, String title, String content) {
         this.title = title;
@@ -40,5 +43,13 @@ public class Article {
 
     public int getId() {
         return id;
+    }
+
+    public Writer getWriter() {
+        return writer;
+    }
+
+    public void setWriter(Writer writer) {
+        this.writer = writer;
     }
 }
