@@ -11,7 +11,7 @@ public class Article {
     private String title;
     private String content;
 
-    @OneToMany
+    @ManyToOne
     private Writer writer;
 
 
