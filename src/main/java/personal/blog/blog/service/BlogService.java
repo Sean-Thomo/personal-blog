@@ -2,8 +2,6 @@ package personal.blog.blog.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import personal.blog.blog.entity.Article;
 import personal.blog.blog.repository.ArticleRepository;
@@ -13,18 +11,12 @@ public class BlogService {
     @Autowired
     ArticleRepository articleRepository;
 
-    List<Article> articleList = new ArrayList<>(Arrays.asList(
-            new Article(1,"Article 1", "This is the first article content."),
-            new Article(2,"Article 2", "This is the second article content."),
-            new Article(3,"Article 3", "This is the third article content.")
-    ));
-
     public List<Article> getArticles() {
-        return articleList;
+        return articleRepository.findAll();
     }
 
     public Article getArticleById(int id) {
-        return articleList.stream().filter(e -> (e.getId() == id)).findFirst().get();
+        return articleRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found."));
     }
 
     public void createArticle(Article article) {
