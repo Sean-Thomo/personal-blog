@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
+//Fix class by implementing the  SOLID principle
+
 @Entity
 @Table(name = "Writer")
 public class Writer {
@@ -14,7 +16,7 @@ public class Writer {
     private String surname;
     private String email;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Article> articles;
 
     public Writer() {}
